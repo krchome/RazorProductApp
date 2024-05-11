@@ -1,0 +1,37 @@
+﻿@page
+@model RazorProductApp.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1>All Products</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Manufacturer</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.Products)
+        {
+            <tr>
+                <td style="padding-right: 30px;">@product.Name</td>
+                <td style="padding-right: 30px;">@product.Manufacturer</td>
+                <td>@product.Price.ToString("C")</td>
+                <td>
+                    <a asp-page="./DetailsPage" asp-route-id="@product.Id">Details</a> |
+                    <a asp-page="./EditProduct" asp-route-id="@product.Id">Edit</a> |
+                    <a asp-page="./DeleteProduct" asp-route-id="@product.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <a asp-page="./CreateProduct">Create New Product</a>
+</div>
+
