@@ -5,32 +5,59 @@
     ViewData["Title"] = "Products";
 }
 
-<h1>All Products</h1>
 
-<table>
+<h1>Product List</h1>
+
+<form method="get">
+    <input type="text" placeholder="Search" asp-for="SearchString" />
+    <button type="submit">Search</button>
+</form>
+
+
+<table class="table">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Manufacturer</th>
-            <th>Price</th>
+            <th><a asp-page="./Index" asp-route-sortOrder="@ViewData["NameSort"]">Name</a></th>
+            <th><a asp-page="./Index" asp-route-sortOrder="@ViewData["ManufacturerSort"]">Manufacturer</a></th>
+            <th><a asp-page="./Index" asp-route-sortOrder="@ViewData["PriceSort"]">Price</a></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var product in Model.Products)
         {
             <tr>
-                <td style="padding-right: 30px;">@product.Name</td>
-                <td style="padding-right: 30px;">@product.Manufacturer</td>
+                <td>@product.Name</td>
+                <td>@product.Manufacturer</td>
                 <td>@product.Price.ToString("C")</td>
-                <td>
-                    <a asp-page="./DetailsPage" asp-route-id="@product.Id">Details</a> |
-                    <a asp-page="./EditProduct" asp-route-id="@product.Id">Edit</a> |
-                    <a asp-page="./DeleteProduct" asp-route-id="@product.Id">Delete</a>
-                </td>
             </tr>
         }
     </tbody>
 </table>
+@{
+    var previousPage = @Model.PageNumber - 1;
+    var nextPage = @Model.PageNumber + 1;
+}
+
+<div>
+    @if (Model.HasPreviousPage)
+    {
+        <a asp-page="./Index" asp-route-pageNumber="1">First</a>
+        <a asp-page="./Index" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+    }
+
+    @for (var i = 1; i <= Model.TotalPages; i++)
+    {
+        <a asp-page="./Index" asp-route-pageNumber="@i">@i</a>
+    }
+
+    @if (Model.HasNextPage)
+    {
+        <a asp-page="./Index" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+        <a asp-page="./Index" asp-route-pageNumber="@Model.TotalPages">Last</a>
+    }
+</div>
+
+
 <div>
     <a asp-page="./CreateProduct">Create New Product</a>
 </div>
